@@ -1647,6 +1647,14 @@ public OnLoadInventory(playerid) {
 	return true;
 }
 
+stock DestroyPlayerTextDraws(playerid) {
+	for (new i; i < INVENTORY_SIZE; i++) PlayerTextDrawDestroy(playerid, ptd_inventory[playerid][SLOT_ICON][i]); // Ломаем текст-дравы главных слотов, когда игрок выходит.
+	for (new i; i < MAX_ITEMS_SECONDARY; i++) PlayerTextDrawDestroy(playerid, ptd_inventory[playerid][OTHER_SLOT_ICON][i]); // Ломаем текст-дравы вторичных слотов, когда игрок выходит.
+	for (new i; i < sizeof td_buttons[]; i++) PlayerTextDrawDestroy(playerid, td_buttons[playerid][i]); // Ломает текст-дравы кнопок, когда игрок вышел с сервера.
+	
+	return 1;
+}
+
 stock ClearInventoryData(playerid) {
 	for (new page; page < MAX_PAGE; page++) {
 		for (new slot; slot < INVENTORY_SIZE; slot++) {
@@ -1689,6 +1697,8 @@ public OnGameModeInit() {
 #endif
 
 public OnPlayerDisconnect(playerid, reason) {
+	DestroyPlayerTextDraws(playerid);
+	
 	// SaveInventoryData(playerid);
 	// ClearInventoryData(playerid);
 	#if defined Inv_OnPlayerDisconnect
